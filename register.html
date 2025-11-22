@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>분실물 등록하기</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="reg-body">
+
+<!-- 이전 페이지 버튼 -->
+<a href="index.html" class="back-btn">← 이전 페이지</a>
+
+<!-- 페이지 제목 -->
+<h2 class="reg-title">📸 분실물 등록하기</h2>
+
+<!-- 카드 -->
+<div class="reg-card">
+    <form class="reg-form" id="lostForm">
+
+        <!-- 파일 업로드 -->
+        <label class="reg-label">사진 업로드</label>
+        <label class="upload-box">
+            <input type="file" id="imageInput" class="file-input" accept="image/*">
+            <div class="upload-icon">⬆️</div>
+            <div class="upload-text">
+                파일을 선택하거나 클릭하세요<br>
+                <span>jpg, png 등 이미지 파일</span>
+            </div>
+        </label>
+
+        <!-- 건물 선택 -->
+        <label class="reg-label">장소 선택</label>
+        <select id="building-select" class="reg-select" required>
+            <option>소웨관/미센</option>
+            <option>인상사</option>
+            <option>미술관</option>
+            <option>법학관</option>
+            <option>평화의광장</option>
+            <option>국제관</option>
+            <option>노천마당</option>
+            <option>종합실험동</option>
+            <option>공학관</option>
+            <option>사회과학관</option>
+            <option>치과병원</option>
+            <option>중앙도서관</option>
+            <option>혜당관</option>
+            <option>체육관</option>
+            <option>대운동장</option>
+        </select>
+
+        <!-- 설명 -->
+        <label class="reg-label">분실물 종류</label>
+        <textarea id="desc" rows="4" class="reg-input textarea"></textarea>
+
+        <!-- 제출 버튼 -->
+        <button type="submit" class="reg-btn">등록하기</button>
+
+    </form>
+</div>
+
+<!-- 🔥 중요: script.js는 register.html과 같은 폴더(frontend)에 있으므로 이렇게 불러야 함 -->
+<script src="script.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+/* ---------------------------
+   글로벌 공통 스타일
+---------------------------- */
+
+body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+    background: #e8f4ff;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ---------------------------
+   메인 페이지 제목
+---------------------------- */
+
+.page-title {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.page-title h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.page-title p {
+    font-size: 15px;
+    color: #333;
+    margin: 0;
+}
+
+
+/* ---------------------------
+   지도 영역
+---------------------------- */
+
+.map-container {
+    position: relative;
+    width: 800px;
+    margin: 0 auto;
+}
+
+.map-container img {
+    max-width: 800px !important;
+    height: auto !important;
+    display: block;
+    margin: 0 auto;
+}
+
+
+/* ---------------------------
+   핀(이미지 + 숫자)
+---------------------------- */
+
+.pin {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-size: 15px;
+    font-weight: 700;
+    z-index: 20;
+}
+
+
+/* ---------------------------
+   메인 페이지: 등록하기 버튼
+---------------------------- */
+
+.register-btn-wrapper {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.register-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #2563eb;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+    transition: 0.15s;
+    margin-top: 20px;
+}
+
+.register-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.33);
+}
+
+
+/* ---------------------------
+   등록 페이지 전용
+---------------------------- */
+
+.reg-body {
+    background: #f5f7fb;
+    padding: 30px 0;
+}
+
+.reg-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1f2a44;
+    margin-bottom: 10px;
+}
+
+.reg-card {
+    width: 420px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px 30px 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.reg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.reg-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2b3443;
+}
+
+
+/* 입력 박스 */
+.reg-input,
+.reg-select,
+.textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #cfd6e2;
+    background: #f9fafc;
+    font-size: 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    outline: none;
+}
+
+.textarea {
+    box-sizing: border-box;
+}
+
+.reg-input:focus,
+.reg-select:focus,
+.textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    background: #ffffff;
+}
+
+
+/* ---------------------------
+   파일 업로드 박스
+---------------------------- */
+
+.upload-box {
+    border: 1px dashed #cdd4e1;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    cursor: pointer;
+    background: #f9fafc;
+    transition: 0.15s;
+}
+
+.upload-box:hover {
+    background: #f3f6ff;
+    border-color: #2563eb;
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.2);
+}
+
+.upload-box .file-input {
+    display: none;
+}
+
+.upload-icon {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.upload-text {
+    font-size: 13px;
+    color: #2d3b50;
+}
+
+.upload-text span {
+    font-size: 12px;
+    color: #7e889a;
+}
+
+
+/* ---------------------------
+   제출 버튼
+---------------------------- */
+
+.reg-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 12px 0;
+    border-radius: 999px;
+    border: none;
+    background: #2563eb;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    transition: 0.15s;
+}
+
+.reg-btn:hover {
+    background: #1d4ed8;
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.30);
+    transform: translateY(-1px);
+}
+
+
+/* ---------------------------
+   등록 페이지: 뒤로가기 버튼
+---------------------------- */
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 14px;
+    color: #1f3a93;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 10px;
+    background: #eef3ff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    transition: 0.15s;
+}
+
+.back-btn:hover {
+    background: #dce7ff;
+    transform: translateX(-3px);
+}
