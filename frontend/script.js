@@ -1,6 +1,5 @@
-/* =======================
-   1. 건물 정보
-======================= */
+const API_BASE = "http://localhost:3000";
+
 const BUILDINGS = [
     { id: "pin-swict",  name: "소웨관/미센" },
     { id: "pin-biz",    name: "인상사" },
@@ -23,25 +22,28 @@ const pageName = window.location.pathname.split("/").pop() || "index.html";
 
 
 /* ========================================================
-   A. 메인 지도 페이지 (index.html)
+   A. index.html (핀 개수 표시)
 ======================================================== */
 if (pageName === "index.html") {
 
-    function updatePins() {
-        let items = JSON.parse(localStorage.getItem("lostItems") || "[]");
-        const counts = {};
+    async function loadCounts() {
+        try {
+            const res = await fetch(`${API_BASE}/api/buildings`);
+            const data = await res.json();
 
-        items.forEach(i => {
-            counts[i.building] = (counts[i.building] || 0) + 1;
-        });
+            const counts = {};
+            data.forEach(row => counts[row.building] = row.count);
 
-        BUILDINGS.forEach(b => {
-            const pin = document.getElementById(b.id);
-            if (pin) pin.textContent = counts[b.name] || 0;
-        });
+            BUILDINGS.forEach(b => {
+                const pin = document.getElementById(b.id);
+                if (pin) pin.textContent = counts[b.name] || 0;
+            });
+        } catch (err) {
+            console.error("핀 개수 불러오기 실패:", err);
+        }
     }
 
-    updatePins();
+    loadCounts();
 
     document.querySelectorAll(".pin").forEach(pin => {
         pin.addEventListener("click", () => {
@@ -54,7 +56,7 @@ if (pageName === "index.html") {
 
 
 /* ========================================================
-   B. 목록 페이지 (list.html)
+   B. list.html (목록 출력 + 사진)
 ======================================================== */
 if (pageName === "list.html") {
 
@@ -67,43 +69,52 @@ if (pageName === "list.html") {
     } else {
         document.getElementById("building-title").innerText = `${building} 분실물 목록`;
 
-        let items = JSON.parse(localStorage.getItem("lostItems") || "[]");
-        const filtered = items.filter(i => i.building === building);
+        async function loadList() {
+            try {
+                const res = await fetch(`${API_BASE}/api/items?building=${encodeURIComponent(building)}`);
+                const items = await res.json();
 
-        if (filtered.length === 0) {
-            container.innerHTML = "<p>분실물이 없습니다.</p>";
-        } else {
-            let html = "";
-            filtered.reverse().forEach(i => {
-                const date = new Date(i.createdAt).toLocaleDateString();
+                if (items.length === 0) {
+                    container.innerHTML = "<p>분실물이 없습니다.</p>";
+                    return;
+                }
 
-               html += `
-    <div class="item-card" style="
-        border:1px solid #ddd;
-        margin:10px;
-        padding:10px;
-        border-radius:8px;
-        background:#fff;">
+                let html = "";
+                items.forEach(i => {
+                    const date = new Date(i.createdAt).toLocaleDateString();
 
-        ${i.image ? `<img src="${i.image}" style="width:120px; border-radius:8px; margin-bottom:8px;">` : ""}
+                    html += `
+                        <div class="item-card" style="
+                            border:1px solid #ddd;
+                            margin:10px;
+                            padding:10px;
+                            border-radius:8px;
+                            background:#fff;">
 
-        <h3>${i.desc}</h3>
-        <p>장소: ${i.building}</p>
-        <p>날짜: ${date}</p>
-    </div>
-`;
+                            ${i.image ? `<img src="${i.image}" style="width:120px; border-radius:8px; margin-bottom:8px;">` : ""}
 
-            });
+                            <h3>${i.description}</h3>
+                            <p>장소: ${i.building}</p>
+                            <p>날짜: ${date}</p>
+                        </div>
+                    `;
+                });
 
-            container.innerHTML = html;
+                container.innerHTML = html;
+
+            } catch (err) {
+                console.error("목록 불러오기 실패:", err);
+            }
         }
+
+        loadList();
     }
 }
 
 
 
 /* ========================================================
-   C. 등록 페이지 (register.html)
+   C. register.html (등록하기)
 ======================================================== */
 if (pageName === "register.html") {
 
@@ -114,14 +125,15 @@ if (pageName === "register.html") {
         e.preventDefault();
 
         const building = document.getElementById("building-select").value;
-        const desc = document.getElementById("desc").value;
+        const description = document.getElementById("desc").value;
 
-        if (!building || !desc) {
+        if (!building || !description) {
             alert("장소와 설명을 모두 입력해주세요!");
             return;
         }
 
-        // 이미지 파일을 base64로 변환하기
+        let imageBase64 = "";
+
         function convertToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -131,14 +143,9 @@ if (pageName === "register.html") {
             });
         }
 
-        // 이미지가 업로드된 경우 base64로 변환
-        let imageBase64 = "";
-
         if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            convertToBase64(file).then(base64 => {
+            convertToBase64(fileInput.files[0]).then(base64 => {
                 imageBase64 = base64;
-
                 saveData();
             });
         } else {
@@ -146,19 +153,22 @@ if (pageName === "register.html") {
         }
 
         function saveData() {
-            const newItem = {
-                building,
-                desc,
-                image: imageBase64,   // base64 저장
-                createdAt: new Date().toISOString()
-            };
-
-            let items = JSON.parse(localStorage.getItem("lostItems") || "[]");
-            items.push(newItem);
-            localStorage.setItem("lostItems", JSON.stringify(items));
-
-            alert("등록이 완료되었습니다!");
-            window.location.href = "index.html";
+            fetch(`${API_BASE}/api/items`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ building, description, image: imageBase64 })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("등록 실패");
+                return res.json();
+            })
+            .then(() => {
+                alert("등록 성공!");
+                window.location.href = "index.html";
+            })
+            .catch(err => {
+                console.error("등록 실패:", err);
+            });
         }
     });
 }
